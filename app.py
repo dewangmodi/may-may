@@ -3,6 +3,7 @@ from praw.models import MoreComments
 import regex
 import datetime
 import mysql.connector
+import os
 
 #We try to connect to database
 #If it fails, we create one
@@ -10,7 +11,7 @@ try:
     mydb = mysql.connector.connect(
       host="localhost",
       user="maymay",
-      passwd="Password123$",
+      passwd=os.getenv("db_password"),
       database="maymayurls"
     )
     mycursor = mydb.cursor()
@@ -18,7 +19,7 @@ except:
     mydb = mysql.connector.connect(
       host="localhost",
       user="maymay",
-      passwd="Password123$"
+      passwd=os.getenv("db_password")
     )
 
     mycursor = mydb.cursor()
@@ -27,11 +28,11 @@ except:
     mycursor.execute("CREATE TABLE urls (url VARCHAR(255))")
 
 #Need to enter your own details
-r = praw.Reddit(client_id='enter here',
-                     client_secret='enter here',
-                     password='enter here',
+r = praw.Reddit(client_id=os.getenv("reddit_id"),
+                     client_secret=os.getenv("reddit_secret"),
+                     password=os.getenv("reddit_password"),
                      user_agent='using praw',
-                     username='enter here') 
+                     username=os.getenv("reddit_username")) 
 
 subreddit = r.subreddit('memes')
 
